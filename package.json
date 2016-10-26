@@ -1,0 +1,23 @@
+{
+  "name": "rxjs-marble-samples",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Johann Rakotoharisoa",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha --opts mocha.opts"
+  },
+  "dependencies": {
+    "rxjs": "5.0.0-beta.12"
+  },
+  "devDependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/core-js": "^0.9.34",
+    "@types/mocha": "^2.2.32",
+    "chai": "^3.5.0",
+    "core-js": "^2.4.1",
+    "mocha": "^3.1.2",
+    "ts-node": "^1.6.0",
+    "typescript": "^2.0.6"
+  }
+}
