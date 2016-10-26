@@ -35,10 +35,13 @@ describe('MailBox - boxStream', () => {
     });
 
     it('should only receive mail for email box (use Marble)', () => {
-        // Given
+        // Marble setup
         const scheduler = new TestScheduler((a, b) => { expect(a).to.eqls(b); });
+        const src = '--a-b-';
+        const exp = '--a---';
+        const deliver$ = scheduler.createHotObservable<IMessage>(src, { a: event1, b: event2 });
 
-        const deliver$ = scheduler.createHotObservable<IMessage>('--a-b-', { a: event1, b: event2 });
+        // Given
         const co_deliver$ = deliver$.publish();
         const mailBox = new MailBox(co_deliver$, 'jr@mail.com');
 
@@ -46,7 +49,7 @@ describe('MailBox - boxStream', () => {
         co_deliver$.connect();
 
         //Then
-        scheduler.expectObservable(mailBox.boxStream).toBe('--a---', { a: event1, b: event2 });
+        scheduler.expectObservable(mailBox.boxStream).toBe(exp, { a: event1, b: event2 });
         scheduler.flush();
     });
 })
