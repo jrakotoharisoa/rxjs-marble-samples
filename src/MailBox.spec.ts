@@ -1,8 +1,15 @@
 import MailBox, { IMessage } from './MailBox';
-import { Subject, TestScheduler } from 'rxjs';
+import { Subject } from 'rxjs/subject';
 import { expect } from 'chai';
 
+import { hot, init, flush, expectObservable } from './marble-helper';
+
+// Init Marble test scheduler
+
 describe('MailBox - boxStream', () => {
+    init((actual, expected) => {
+        expect(actual).to.eqls(expected);
+    });
     const event1 = {
         to: 'jr@mail.com',
         from: 'hello@mail.com',
@@ -36,10 +43,9 @@ describe('MailBox - boxStream', () => {
 
     it('should only receive mail for email box (use Marble)', () => {
         // Marble setup
-        const scheduler = new TestScheduler((a, b) => { expect(a).to.eqls(b); });
         const src = '--a-b-';
         const exp = '--a---';
-        const deliver$ = scheduler.createHotObservable<IMessage>(src, { a: event1, b: event2 });
+        const deliver$ = hot<IMessage>(src, { a: event1, b: event2 });
 
         // Given
         const co_deliver$ = deliver$.publish();
@@ -49,7 +55,7 @@ describe('MailBox - boxStream', () => {
         co_deliver$.connect();
 
         //Then
-        scheduler.expectObservable(mailBox.boxStream).toBe(exp, { a: event1, b: event2 });
-        scheduler.flush();
+        expectObservable(mailBox.boxStream).toBe(exp, { a: event1 });
+        flush();
     });
 })
